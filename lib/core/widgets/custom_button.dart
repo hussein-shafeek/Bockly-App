@@ -1,5 +1,6 @@
 import 'package:bookly/core/utils/app_colors.dart';
 import 'package:bookly/core/utils/app_styles.dart';
+import 'package:bookly/core/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -9,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final void Function()? onPressed;
   final double? fontSize;
+  final bool isLoading;
 
   const CustomButton({
     Key? key,
@@ -18,6 +20,7 @@ class CustomButton extends StatelessWidget {
     required this.textColor,
     this.onPressed,
     this.fontSize,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -33,13 +36,17 @@ class CustomButton extends StatelessWidget {
             borderRadius: borderRadius ?? BorderRadius.circular(15.0),
           ),
         ),
-        child: Text(
-          text,
-          style: Styles.textStyle18.copyWith(
-            color: textColor,
-            fontSize: fontSize,
-          ),
-        ),
+        child: isLoading
+            ? const LoadingIndicator(
+                color: Colors.white, // Ensure visibility on colored buttons
+              )
+            : Text(
+                text,
+                style: Styles.textStyle18.copyWith(
+                  color: textColor,
+                  fontSize: fontSize,
+                ),
+              ),
       ),
     );
   }

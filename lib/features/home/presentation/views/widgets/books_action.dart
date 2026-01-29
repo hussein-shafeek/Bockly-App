@@ -1,11 +1,19 @@
 import 'package:bookly/core/widgets/custom_button.dart';
+
 import 'package:bookly/features/home/data/models/book_model/book_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BooksAction extends StatelessWidget {
+class BooksAction extends StatefulWidget {
   const BooksAction({super.key, required this.bookModel});
   final BookModel bookModel;
+
+  @override
+  State<BooksAction> createState() => _BooksActionState();
+}
+
+class _BooksActionState extends State<BooksAction> {
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +26,7 @@ class BooksAction extends StatelessWidget {
               text: 'Free',
               backgroundColor: Colors.white,
               textColor: Colors.black,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 bottomLeft: Radius.circular(16),
               ),
@@ -26,14 +34,32 @@ class BooksAction extends StatelessWidget {
           ),
           Expanded(
             child: CustomButton(
+              isLoading: isLoading,
               onPressed: () async {
-                Uri url = Uri.parse(bookModel.volumeInfo.previewLink!);
-                if (!await canLaunchUrl(url)) {
+                Uri url = Uri.parse(widget.bookModel.volumeInfo.previewLink!);
+                setState(() {
+                  isLoading = true;
+                });
+                if (await canLaunchUrl(url)) {
                   await launchUrl(url);
+                } else {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Cannot launch this url')),
+                    );
+                  }
+                }
+
+                await Future.delayed(const Duration(milliseconds: 500));
+
+                if (mounted) {
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
               },
               fontSize: 16,
-              text: getText(bookModel),
+              text: getText(widget.bookModel),
               backgroundColor: const Color(0xffEF8262),
               textColor: Colors.white,
               borderRadius: const BorderRadius.only(
