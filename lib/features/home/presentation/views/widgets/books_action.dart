@@ -1,8 +1,7 @@
+import 'package:bookly/core/utils/functions/launch_url.dart';
 import 'package:bookly/core/widgets/custom_button.dart';
-
 import 'package:bookly/features/home/data/models/book_model/book_model.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BooksAction extends StatefulWidget {
   const BooksAction({super.key, required this.bookModel});
@@ -36,19 +35,14 @@ class _BooksActionState extends State<BooksAction> {
             child: CustomButton(
               isLoading: isLoading,
               onPressed: () async {
-                Uri url = Uri.parse(widget.bookModel.volumeInfo.previewLink!);
                 setState(() {
                   isLoading = true;
                 });
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                } else {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Cannot launch this url')),
-                    );
-                  }
-                }
+
+                await launchCustomUrl(
+                  context,
+                  widget.bookModel.volumeInfo.previewLink,
+                );
 
                 await Future.delayed(const Duration(milliseconds: 500));
 
