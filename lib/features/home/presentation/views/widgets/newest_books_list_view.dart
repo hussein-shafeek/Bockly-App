@@ -1,5 +1,5 @@
 import 'package:bookly/core/widgets/custom_error_widget.dart';
-import 'package:bookly/core/widgets/loading_indicator.dart';
+import 'package:bookly/core/shimmer/shimmer_newset_list_view.dart';
 import 'package:bookly/features/home/presentation/view_models/newest_books_cubit/newset_books_cubit.dart';
 import 'package:bookly/features/home/presentation/views/widgets/newest_books_list_view_item.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class NewestBooksListView extends StatelessWidget {
         } else if (state is NewsetBooksFailure) {
           return CustomErrorWidget(error: state.errMessage);
         } else {
-          return LoadingIndicator();
+          return const ShimmerNewsetListView();
         }
       },
     );
