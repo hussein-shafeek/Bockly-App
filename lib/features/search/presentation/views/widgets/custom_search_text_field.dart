@@ -10,6 +10,10 @@ class CustomSearchTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: (value) {
+        if (value.trim().isEmpty ||
+            !RegExp(r'[a-zA-Z0-9\u0600-\u06FF]').hasMatch(value)) {
+          return;
+        }
         BlocProvider.of<SearchBooksCubit>(
           context,
         ).fetchSearchedBooks(category: value);

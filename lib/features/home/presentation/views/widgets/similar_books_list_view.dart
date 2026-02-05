@@ -4,6 +4,8 @@ import 'package:bookly/features/home/presentation/view_models/smila_books_cubit/
 import 'package:bookly/features/home/presentation/views/widgets/custom_book_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:bookly/core/routes/app_router.dart';
 
 class SimilarBooksListView extends StatelessWidget {
   const SimilarBooksListView({super.key});
@@ -21,7 +23,11 @@ class SimilarBooksListView extends StatelessWidget {
               shrinkWrap: true,
               itemCount: state.books.length,
               itemBuilder: (context, index) => InkWell(
-                onTap: () {},
+                onTap: () {
+                  GoRouter.of(
+                    context,
+                  ).push(AppRouter.kBookDetailsView, extra: state.books[index]);
+                },
                 borderRadius: BorderRadius.circular(8.0),
                 child: AspectRatio(
                   aspectRatio: 2.7 / 4,
